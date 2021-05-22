@@ -8,6 +8,10 @@ cmake ..
 make
 ./main/program <data graph file> <query graph file> <candidate set file>
 ```
+example arguments: (set working directory to $ProjectFileDir$ first)
+```
+data/test.igraph query/test.igraph candidate_set/test.cs
+```
 ### executable program that outputs a candidate set
 ```
 ./executable/filter_vertices <data graph file> <query graph file>
