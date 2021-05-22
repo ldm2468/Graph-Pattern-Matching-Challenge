@@ -37,18 +37,25 @@ bool Backtrack::Verify(const std::vector<Vertex> &embedding) {
 #endif
 }
 
+void Backtrack::PrintAns(const std::vector<Vertex> &embedding) {
+  std::cout << "a";
+  for (Vertex i = 0; i < queryVertexCount; i++) {
+    std::cout << " " << embedding[i];
+  }
+  std::cout << std::endl;
+  printCount++;
+}
+
 bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
+  if (printCount >= MAX_PRINT_NO) {
+    return false;
+  }
   if (queryVertex == queryVertexCount) {
     if (!Verify(map)) {
       std::cout << "Incorrect embedding found!" << std::endl;
       return false;
     }
-    // print answer
-    std::cout << "a";
-    for (Vertex i = 0; i < queryVertexCount; i++) {
-      std::cout << " " << map[i];
-    }
-    std::cout << std::endl;
+    PrintAns(map);
     return true;
   }
 
@@ -88,5 +95,6 @@ void Backtrack::PrintAllMatches() {
 
   std::vector<Vertex> map(queryVertexCount);
 
+  printCount = 0;
   SolveRow(0, map);
 }
