@@ -15,6 +15,7 @@ class Backtrack {
   Backtrack();
   ~Backtrack();
 
+  bool Verify(const Graph &data, const Graph &query, const std::vector<Vertex> &embedding);
   void PrintAllMatches(const Graph &data, const Graph &query,
                        const CandidateSet &cs);
 };
