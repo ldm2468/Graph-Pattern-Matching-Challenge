@@ -21,6 +21,7 @@ bool Backtrack::Verify(const std::vector<Vertex> &embedding) {
     // even the size doesn't match
     return false;
   }
+
   // check labels
   for (Vertex i = 0; i < vertexCount; i++) {
     if (data.GetLabel(embedding[i]) != query.GetLabel(i)) {
