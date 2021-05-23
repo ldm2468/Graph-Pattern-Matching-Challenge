@@ -26,7 +26,7 @@ bool Backtrack::Verify(const std::vector<Vertex> &embedding) {
     for (Vertex j = i + 1; j < vertexCount; j++) {
       bool queryIsNeighbor = query.IsNeighbor(i, j);
       bool embeddingIsNeighbor = data.IsNeighbor(embedding[i], embedding[j]);
-      if (queryIsNeighbor != embeddingIsNeighbor) {
+      if (queryIsNeighbor && !embeddingIsNeighbor) {
         return false;
       }
     }
