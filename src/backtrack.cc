@@ -70,7 +70,7 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     for (Vertex j = 0; j < queryVertex; j++) {
       bool queryIsNeighbor = query.IsNeighbor(j, queryVertex);
       bool dataIsNeighbor = data.IsNeighbor(map[j], dataVertex);
-      if (queryIsNeighbor != dataIsNeighbor) {
+      if (queryIsNeighbor && !dataIsNeighbor) {
         valid = false;
         break;
       }
