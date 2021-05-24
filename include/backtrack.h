@@ -19,8 +19,8 @@ class Backtrack {
   ~Backtrack();
 
   void PrintAllMatches();
- private:
   bool Verify(const std::vector<Vertex> &embedding);
+ private:
   void PrintAns(const std::vector<Vertex> &embedding);
   bool SolveRow(Vertex queryVertex, std::vector<Vertex> map);
   const Graph &data;
