@@ -17,4 +17,6 @@ foreach(file ${DATA} ${QUERY} ${CANDIDATE_SET})
     configure_file("${file}" "main/${file}" COPYONLY)
 endforeach()
 
+configure_file("checker.txt" "main/checker.txt" COPYONLY)
+
 add_subdirectory(main)
