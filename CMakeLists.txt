@@ -9,4 +9,12 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 file(GLOB SOURCES src/*)
 
+file(GLOB DATA RELATIVE ${PROJECT_SOURCE_DIR} data/*)
+file(GLOB QUERY RELATIVE ${PROJECT_SOURCE_DIR} query/*)
+file(GLOB CANDIDATE_SET RELATIVE ${PROJECT_SOURCE_DIR} candidate_set/*)
+
+foreach(file ${DATA} ${QUERY} ${CANDIDATE_SET})
+    configure_file("${file}" "main/${file}" COPYONLY)
+endforeach()
+
 add_subdirectory(main)
