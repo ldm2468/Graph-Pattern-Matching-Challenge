@@ -1,2 +1,7 @@
 program
-data/test.igraph query/test.igraph candidate_set/test.cs
+data/lcc_hprd.igraph query/lcc_hprd_n1.igraph candidate_set/lcc_hprd_n1.cs
+data/lcc_hprd.igraph query/lcc_hprd_s1.igraph candidate_set/lcc_hprd_s1.cs
+data/lcc_human.igraph query/lcc_human_n1.igraph candidate_set/lcc_human_n1.cs
+data/lcc_human.igraph query/lcc_human_s1.igraph candidate_set/lcc_human_s1.cs
+data/lcc_yeast.igraph query/lcc_yeast_n1.igraph candidate_set/lcc_yeast_n1.cs
+data/lcc_yeast.igraph query/lcc_yeast_s1.igraph candidate_set/lcc_yeast_s1.cs
