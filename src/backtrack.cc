@@ -54,7 +54,7 @@ void Backtrack::PrintAns(const std::vector<Vertex> &embedding) {
   printCount++;
 }
 
-bool Backtrack::SolveRow(int current, std::vector<Vertex> map) {
+bool Backtrack::SolveRow(int current) {
   if (printCount >= MAX_PRINT_NO) {
     return false;
   }
@@ -93,7 +93,7 @@ bool Backtrack::SolveRow(int current, std::vector<Vertex> map) {
       map[queryVertex] = dataVertex;
       usedDataVertices[dataVertex] = true;
       usedQueryVertices[queryVertex] = true;
-      SolveRow(current + 1, map);
+      SolveRow(current + 1);
       usedDataVertices[dataVertex] = false;
       usedQueryVertices[queryVertex] = false;
     }
@@ -114,7 +114,8 @@ void Backtrack::PrintAllMatches() {
     usedQueryVertices.push_back(false);
   }
 
-  std::vector<Vertex> map(queryVertexCount);
+  map.clear();
+  map.resize(queryVertexCount, 0);
 
   queryVertices.clear();
   for (Vertex i = 0; i < queryVertexCount; i++) {
@@ -127,5 +128,5 @@ void Backtrack::PrintAllMatches() {
 
   printCount = 0;
   usedQueryVertices[queryVertices[0].first] = true;
-  SolveRow(0, map);
+  SolveRow(0);
 }
