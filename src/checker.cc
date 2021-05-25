@@ -24,7 +24,14 @@ void Checker::Run(const std::string& filename) {
     if (data.empty() || query.empty() || cs.empty()) {
       break;
     }
+    struct timespec startTime {};
+    clock_gettime(CLOCK_MONOTONIC, &startTime);
     RunSingle(executable, data, query, cs);
+    struct timespec endTime {};
+    clock_gettime(CLOCK_MONOTONIC, &endTime);
+    int64_t nanos = (endTime.tv_sec - startTime.tv_sec) * 1000000000 + (endTime.tv_nsec - startTime.tv_nsec);
+    double seconds = (double) nanos * 1E-9;
+    std::cout << "Time (seconds): " << seconds << std::endl;
   }
   fin.close();
 }
