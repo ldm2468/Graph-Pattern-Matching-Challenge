@@ -76,11 +76,15 @@ bool Backtrack::SolveRow(int current, std::vector<Vertex> map) {
     }
     // check valid mapping
     bool valid = true;
-    for (Vertex j = 0; j < current; j++) {
-      Vertex prevQueryVertex = queryVertices[j].first;
-      bool queryIsNeighbor = query.IsNeighbor(prevQueryVertex, queryVertex);
-      bool dataIsNeighbor = data.IsNeighbor(map[prevQueryVertex], dataVertex);
-      if (queryIsNeighbor && !dataIsNeighbor) {
+    size_t start = query.GetNeighborStartOffset(queryVertex);
+    size_t end = query.GetNeighborEndOffset(queryVertex);
+    for (size_t j = start; j < end; j++) {
+      Vertex queryVertexNeighbor = query.GetNeighbor(j);
+      if (!usedQueryVertices[queryVertexNeighbor]) {
+        continue;
+      }
+      if (!data.IsNeighbor(map[queryVertexNeighbor], dataVertex)) {
+        // query neighbor but not data neighbor -> incorrect embedding!
         valid = false;
         break;
       }
@@ -88,8 +92,10 @@ bool Backtrack::SolveRow(int current, std::vector<Vertex> map) {
     if (valid) {
       map[queryVertex] = dataVertex;
       usedDataVertices[dataVertex] = true;
+      usedQueryVertices[queryVertex] = true;
       SolveRow(current + 1, map);
       usedDataVertices[dataVertex] = false;
+      usedQueryVertices[queryVertex] = false;
     }
   }
   return false;
@@ -101,6 +107,11 @@ void Backtrack::PrintAllMatches() {
   usedDataVertices.clear();
   for (Vertex i = 0; i < dataVertexCount; i++) {
     usedDataVertices.push_back(false);
+  }
+
+  usedQueryVertices.clear();
+  for (Vertex i = 0; i < queryVertexCount; i++) {
+    usedQueryVertices.push_back(false);
   }
 
   std::vector<Vertex> map(queryVertexCount);
@@ -115,5 +126,6 @@ void Backtrack::PrintAllMatches() {
             });
 
   printCount = 0;
+  usedQueryVertices[queryVertices[0].first] = true;
   SolveRow(0, map);
 }

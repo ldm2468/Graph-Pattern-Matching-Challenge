@@ -29,6 +29,7 @@ class Backtrack {
   const size_t dataVertexCount;
   const size_t queryVertexCount;
   std::vector<bool> usedDataVertices;
+  std::vector<bool> usedQueryVertices;
   std::vector<std::pair<Vertex, size_t>> queryVertices;
   int32_t printCount;
 };
