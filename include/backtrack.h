@@ -22,7 +22,7 @@ class Backtrack {
   bool Verify(const std::vector<Vertex> &embedding);
  private:
   void PrintAns(const std::vector<Vertex> &embedding);
-  bool SolveRow(Vertex queryVertex, std::vector<Vertex> map);
+  bool SolveRow(std::vector<std::pair<Vertex, size_t>>queryVertices, int current, std::vector<Vertex> map);
   const Graph &data;
   const Graph &query;
   const CandidateSet &cs;

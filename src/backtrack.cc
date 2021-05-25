@@ -54,11 +54,11 @@ void Backtrack::PrintAns(const std::vector<Vertex> &embedding) {
   printCount++;
 }
 
-bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
+bool Backtrack::SolveRow(std::vector<std::pair<Vertex, size_t>>queryVertices, int current, std::vector<Vertex> map) {
   if (printCount >= MAX_PRINT_NO) {
     return false;
   }
-  if (queryVertex == queryVertexCount) {
+  if (current == queryVertexCount) {
     if (!Verify(map)) {
       std::cout << "Incorrect embedding found!" << std::endl;
       return false;
@@ -66,8 +66,9 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     PrintAns(map);
     return true;
   }
+  Vertex queryVertex = queryVertices[current].first;
 
-  size_t candidates = cs.GetCandidateSize(queryVertex);
+  size_t candidates = queryVertices[current].second;
   for (Vertex i = 0; i < candidates; i++) {
     Vertex dataVertex = cs.GetCandidate(queryVertex, i);
     if (usedDataVertices[dataVertex]) {
@@ -75,9 +76,10 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     }
     // check valid mapping
     bool valid = true;
-    for (Vertex j = 0; j < queryVertex; j++) {
-      bool queryIsNeighbor = query.IsNeighbor(j, queryVertex);
-      bool dataIsNeighbor = data.IsNeighbor(map[j], dataVertex);
+    for (Vertex j = 0; j < current; j++) {
+      Vertex prevQueryVertex = queryVertices[j].first;
+      bool queryIsNeighbor = query.IsNeighbor(prevQueryVertex, queryVertex);
+      bool dataIsNeighbor = data.IsNeighbor(map[prevQueryVertex], dataVertex);
       if (queryIsNeighbor && !dataIsNeighbor) {
         valid = false;
         break;
@@ -86,7 +88,7 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     if (valid) {
       map[queryVertex] = dataVertex;
       usedDataVertices[dataVertex] = true;
-      SolveRow(queryVertex + 1, map);
+      SolveRow(queryVertices, current + 1, map);
       usedDataVertices[dataVertex] = false;
     }
   }
@@ -103,6 +105,16 @@ void Backtrack::PrintAllMatches() {
 
   std::vector<Vertex> map(queryVertexCount);
 
+  std::vector<std::pair<Vertex, size_t>> queryVertices;
+  queryVertices.reserve(queryVertexCount);
+  for (Vertex i = 0; i < queryVertexCount; i++) {
+    queryVertices.emplace_back(i, cs.GetCandidateSize(i));
+  }
+  std::sort(queryVertices.begin(), queryVertices.end(),
+            [](const std::pair<Vertex, size_t> a, const std::pair<Vertex, size_t> b) {
+              return a.second < b.second;
+            });
+
   printCount = 0;
-  SolveRow(0, map);
+  SolveRow(queryVertices, 0, map);
 }
