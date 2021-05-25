@@ -54,7 +54,7 @@ void Backtrack::PrintAns(const std::vector<Vertex> &embedding) {
   printCount++;
 }
 
-bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
+bool Backtrack::SolveRow(Vertex queryVertex) {
   if (printCount >= MAX_PRINT_NO) {
     return false;
   }
@@ -75,10 +75,14 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     }
     // check valid mapping
     bool valid = true;
-    for (Vertex j = 0; j < queryVertex; j++) {
-      bool queryIsNeighbor = query.IsNeighbor(j, queryVertex);
-      bool dataIsNeighbor = data.IsNeighbor(map[j], dataVertex);
-      if (queryIsNeighbor && !dataIsNeighbor) {
+    size_t start = query.GetNeighborStartOffset(queryVertex);
+    size_t end = query.GetNeighborEndOffset(queryVertex);
+    for (size_t j = start; j < end; j++) {
+      Vertex queryVertexNeighbor = query.GetNeighbor(j);
+      if (queryVertexNeighbor > queryVertex) {
+        continue;
+      }
+      if (!data.IsNeighbor(map[queryVertexNeighbor], dataVertex)) {
         valid = false;
         break;
       }
@@ -86,7 +90,7 @@ bool Backtrack::SolveRow(Vertex queryVertex, std::vector<Vertex> map) {
     if (valid) {
       map[queryVertex] = dataVertex;
       usedDataVertices[dataVertex] = true;
-      SolveRow(queryVertex + 1, map);
+      SolveRow(queryVertex + 1);
       usedDataVertices[dataVertex] = false;
     }
   }
@@ -101,8 +105,9 @@ void Backtrack::PrintAllMatches() {
     usedDataVertices.push_back(false);
   }
 
-  std::vector<Vertex> map(queryVertexCount);
+  map.clear();
+  map.resize(queryVertexCount, 0);
 
   printCount = 0;
-  SolveRow(0, map);
+  SolveRow(0);
 }
